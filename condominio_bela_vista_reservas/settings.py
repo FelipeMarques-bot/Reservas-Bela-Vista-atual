@@ -87,7 +87,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
     "site_title": "Admin Bela Vista",
     "site_brand": "Bela Vista",
-    "site_logo": "img/condominio_bela_vista_fundo.png",
+    "site_logo": "img/condominio_bela_vista_fundo.jpg",
     "login_logo": "img/condominio_bela_vista_fundo.png",
     "site_logo_classes": "img-fluid",
     "site_icon": "img/favicon.ico",
