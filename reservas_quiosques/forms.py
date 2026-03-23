@@ -74,11 +74,20 @@ class ReservaForm(forms.ModelForm):
             Submit('submit', 'Solicitar Reserva', css_class='btn btn-primary mt-3')
         )
 
+    def clean_numero_lote_input(self):
+        numero_lote = self.cleaned_data['numero_lote_input'].strip().upper()
+        try:
+            lote = Lote.objects.get(numero_lote=numero_lote)
+        except Lote.DoesNotExist:
+            raise ValidationError(f"Lote {numero_lote} não encontrado. Entre em contato com o administrador.")
+        return lote
+
     def clean_data_reserva(self):
         data_reserva = self.cleaned_data['data_reserva']
         hoje = timezone.localdate()
 
-        if self.user and self.user.is_superuser:
+        # Admin (superuser ou staff) não tem restrição de antecedência
+        if self.user and (self.user.is_superuser or self.user.is_staff):
             return data_reserva
 
         if data_reserva < hoje:
