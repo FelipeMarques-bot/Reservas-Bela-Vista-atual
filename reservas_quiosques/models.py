@@ -59,16 +59,9 @@ class Reserva(models.Model):
         unique_together = ['quiosque', 'data_reserva']
 
     def clean(self):
-        if self.data_reserva:
-            dias_antecedencia = (self.data_reserva - timezone.now().date()).days
-            if dias_antecedencia < 3:
-                raise ValidationError(
-                    f"A reserva deve ser feita com pelo menos 3 dias de antecedência. "
-                    f"Você está tentando reservar com apenas {dias_antecedencia} dias de antecedência."
-                )
+        pass
 
     def save(self, *args, **kwargs):
-        self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):
