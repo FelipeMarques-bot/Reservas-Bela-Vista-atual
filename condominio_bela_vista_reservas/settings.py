@@ -87,12 +87,11 @@ JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
     "site_title": "Admin Bela Vista",
     "site_brand": "Bela Vista",
-    "site_logo": "img/condominio_bela_vista_fundo.png"
+    "site_logo": "img/condominio_bela_vista_fundo.png",
     "login_logo": "img/condominio_bela_vista_fundo.png",
-    "login_logo_dark": "img/logo_bela_vista_dark.png",
-    "login_form_text": "Acesso Administrativo",
+    "site_logo_classes": "img-fluid",
     "site_icon": "img/favicon.ico",
-    "welcome_sign": "Bem-vindo ao Painel de Reservas do Condomínio Bela Vista",
+    "welcome_sign": "Bem-vindo ao Painel de Reservas",
     "copyright": "Condomínio Bela Vista - 2026",
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
@@ -105,10 +104,6 @@ JAZZMIN_SETTINGS = {
     "hide_apps": [],
     "hide_models": [],
     "order_with_respect_to": ["reservas_quiosques"],
-    "apps_icons": {
-        "reservas_quiosques": "fas fa-umbrella-beach",
-        "auth": "fas fa-users-cog",
-    },
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
@@ -131,6 +126,38 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     "language_chooser": False,
     "related_modal_active": True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-success",
+    "accent": "accent-success",
+    "navbar": "navbar-dark navbar-success",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-success",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }
 
 JAZZMIN_UI_TWEAKS = {
