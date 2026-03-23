@@ -92,3 +92,32 @@ class ReservaForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
+
+
+class CriarSenhaForm(forms.Form):
+    senha = forms.CharField(
+        label="Crie sua Senha",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite uma senha segura'
+        }),
+        min_length=6,
+        help_text="Mínimo de 6 caracteres."
+    )
+    confirmar_senha = forms.CharField(
+        label="Confirme sua Senha",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite a senha novamente'
+        })
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        senha = cleaned_data.get('senha')
+        confirmar_senha = cleaned_data.get('confirmar_senha')
+
+        if senha and confirmar_senha and senha != confirmar_senha:
+            raise ValidationError("As senhas não coincidem. Tente novamente.")
+
+        return cleaned_data
