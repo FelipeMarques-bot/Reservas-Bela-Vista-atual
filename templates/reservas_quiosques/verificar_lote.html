@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verificar Lote - {{ quiosque.get_nome_display }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Reservar {{ quiosque.get_nome_display }}</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Para continuar, informe o número do seu lote:</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="numero_lote" class="form-label">Número do Lote</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="numero_lote" 
+                                name="numero_lote" 
+                                placeholder="Ex: 29" 
+                                required
+                                autofocus
+                            >
+                            <small class="form-text text-muted">Digite apenas o número do seu lote</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Continuar</button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0">
+                        <small>Já possui cadastro? <a href="{% url 'usuarios:login' %}">Faça login aqui</a></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+    /* Reservas Bela Vista/static/css/style.css */
+
+    body {
+        font-family: 'Arial', sans-serif; /* Fonte mais agradável */
+        background-color: #f8f9fa; /* Um fundo levemente cinza */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Garante que o footer fique no final da página */
+    }
+
+    main {
+        flex: 1; /* Faz o conteúdo principal ocupar o espaço restante */
+    }
+
+    /* Estilos para o navbar (exemplo de cores da empresa) */
+    .navbar {
+        background-color: #ffffff !important; /* Fundo branco */
+        border-bottom: 1px solid #e0e0e0; /* Linha sutil */
+    }
+
+    .navbar-brand {
+        color: #FF5A5F !important; /* Cor principal do Airbnb */
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .nav-link {
+        color: #484848 !important; /* Cor de texto mais escura */
+        font-weight: 500;
+        margin-left: 15px;
+    }
+
+    .nav-link:hover {
+        color: #FF5A5F !important; /* Hover com a cor principal */
+    }
+
+    /* Estilos para cards de quiosques (exemplo) */
+    .quiosque-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .quiosque-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .quiosque-card .card-title {
+        color: #FF5A5F;
+        font-weight: bold;
+    }
+
+    /* Estilos para botões (exemplo) */
+    .btn-primary {
+        background-color: #FF5A5F;
+        border-color: #FF5A5F;
+    }
+
+    .btn-primary:hover {
+        background-color: #e04a4f;
+        border-color: #e04a4f;
+    }
+
+    /* Estilos para o footer */
+    footer {
+        background-color: #f0f0f0 !important;
+        color: #6c757d;
+    }

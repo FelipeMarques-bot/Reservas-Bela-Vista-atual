@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro - Reservas Bela Vista{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 mt-5">
+                <h2 class="card-title text-center mb-4" style="color: #FF5A5F;">Registrar</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Registrar</button>
+                </form>
+                <p class="text-center mt-3">
+                    Já tem uma conta? <a href="{% url 'usuarios:login' %}">Faça login aqui</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiosques Disponíveis{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h2 class="display-4" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+        Quiosques Disponíveis para Reserva
+    </h2>
+    <p class="lead" style="color: #2d5016; font-weight: 600; text-shadow: 2px 2px 4px rgba(255,255,255,0.8);">
+    Escolha seu quiosque e aproveite momentos especiais com sua família!
+    </p>
+
+</div>
+
+{% if quiosques %}
+    <div class="row g-4">
+        {% for quiosque in quiosques %}
+        <div class="col-md-6">
+            <div class="card shadow-lg h-100">
+                {% if quiosque.imagem %}
+                    <img src="{{ quiosque.imagem.url }}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                    <div style="height: 300px; background: linear-gradient(135deg, #6b9b4a 0%, #4a7c2c 100%); display: flex; align-items: center; justify-content: center;">
+                        <h3 style="color: white; font-size: 3rem;">{{ quiosque.get_nome_display }}</h3>
+                    </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h3 class="card-title mb-3">{{ quiosque.get_nome_display }}</h3>
+
+                    <div class="mb-3">
+                        <p style="white-space: pre-line; color: #555;">{{ quiosque.descricao|default:"Quiosque disponível para reserva" }}</p>
+                    </div>
+
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><strong>👥 Capacidade:</strong> {{ quiosque.capacidade_maxima }} pessoas</li>
+                        <li class="mb-2"><strong>💰 Valor:</strong> R$ {{ quiosque.valor_diaria }}</li>
+                    </ul>
+                </div>
+
+                <div class="card-footer bg-transparent border-0 pb-4">
+                    <a href="{% url 'reservas_quiosques:reservar_quiosque' quiosque.id %}" class="btn btn-primary w-100 btn-lg">
+                        Reservar Agora
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-warning text-center">
+        <h4>Ops! Nenhum quiosque disponível para reserva no momento.</h4>
+        <p>Entre em contato com o administrador para mais informações.</p>
+    </div>
+{% endif %}
+{% endblock %}
