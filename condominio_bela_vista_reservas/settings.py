@@ -86,18 +86,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
     "site_title": "Admin Bela Vista",
-    "site_logo": "img/Condomínio_Bela_Vista.png",
-    "login_logo": "img/Condomínio_Bela_Vista.png",
+    "site_brand": "Bela Vista",
+    "site_logo": "img/condominio_bela_vista_fundo.png"
+    "login_logo": "img/condominio_bela_vista_fundo.png",
     "login_logo_dark": "img/logo_bela_vista_dark.png",
-    "login_logo_text": "Reservas",
     "login_form_text": "Acesso Administrativo",
     "site_icon": "img/favicon.ico",
     "welcome_sign": "Bem-vindo ao Painel de Reservas do Condomínio Bela Vista",
-    "copyright": "Condomínio Bela Vista - 2025",
+    "copyright": "Condomínio Bela Vista - 2026",
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
-    "topbar_links": [
-        {"name": "Home", "url": "admin:index", "new_window": False},
+    "topmenu_links": [
+        {"name": "Início", "url": "admin:index", "new_window": False},
         {"name": "Site Público", "url": "/", "new_window": True},
     ],
     "show_sidebar": True,
@@ -105,6 +105,10 @@ JAZZMIN_SETTINGS = {
     "hide_apps": [],
     "hide_models": [],
     "order_with_respect_to": ["reservas_quiosques"],
+    "apps_icons": {
+        "reservas_quiosques": "fas fa-umbrella-beach",
+        "auth": "fas fa-users-cog",
+    },
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
@@ -113,11 +117,20 @@ JAZZMIN_SETTINGS = {
         "reservas_quiosques.Lote": "fas fa-home",
         "reservas_quiosques.Reserva": "fas fa-calendar-check",
     },
+    "custom_links": {
+        "reservas_quiosques": [{
+            "name": "Ver Site",
+            "url": "/",
+            "icon": "fas fa-external-link-alt",
+            "new_window": True,
+        }]
+    },
     "custom_css": None,
     "custom_js": None,
-    "show_ui_builder": True,
+    "show_ui_builder": False,
     "changeform_format": "horizontal_tabs",
     "language_chooser": False,
+    "related_modal_active": True,
 }
 
 JAZZMIN_UI_TWEAKS = {
