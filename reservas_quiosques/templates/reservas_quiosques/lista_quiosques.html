@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="card shadow-lg h-100">
                 {% if quiosque.imagem %}
-                    <img src="https://res.cloudinary.com/SEU_CLOUD_NAME/image/upload/{{ quiosque.imagem }}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                    <img src="https://res.cloudinary.com/dyu4evsq5/image/upload/{{ quiosque.imagem }}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
                 {% else %}
                     <img src="{% static 'img/Quiosques.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
                 {% endif %}
