@@ -19,10 +19,12 @@
         {% for quiosque in quiosques %}
         <div class="col-md-6">
             <div class="card shadow-lg h-100">
-                {% if quiosque.imagem %}
-                    <img src="https://res.cloudinary.com/dyu4evsq5/image/upload/{{ quiosque.imagem }}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                {% if quiosque.nome == 'AZ' %}
+                     <img src="{% static 'img/azaleia.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                {% elif quiosque.nome == 'PR' %}
+                     <img src="{% static 'img/primavera.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
                 {% else %}
-                    <img src="{% static 'img/Quiosques.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                     <img src="{% static 'img/Quiosques.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
                 {% endif %}
 
                 <div class="card-body">
