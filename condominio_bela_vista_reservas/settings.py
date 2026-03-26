@@ -104,6 +104,7 @@ cloudinary.config(
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE['RESOURCE_TYPE'] = 'auto'
 
 JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
