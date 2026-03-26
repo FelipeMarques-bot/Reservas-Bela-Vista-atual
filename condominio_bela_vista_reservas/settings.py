@@ -2,6 +2,9 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,11 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
+    'cloudinary',
+    'cloudinary_storage',
     'reservas_quiosques',
     'usuarios',
 ]
@@ -84,26 +87,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
 )
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    'RESOURCE_TYPE': 'auto',
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-CLOUDINARY_STORAGE['RESOURCE_TYPE'] = 'auto'
 
 JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
