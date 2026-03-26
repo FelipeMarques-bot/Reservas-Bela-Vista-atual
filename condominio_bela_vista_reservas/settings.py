@@ -100,7 +100,7 @@ CLOUDINARY_STORAGE = {
     'RESOURCE_TYPE': 'auto',
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'condominio_bela_vista_reservas.cloudinary_storage_backend.CloudinaryMediaStorage'
 
 JAZZMIN_SETTINGS = {
     "site_header": "Condomínio Bela Vista",
