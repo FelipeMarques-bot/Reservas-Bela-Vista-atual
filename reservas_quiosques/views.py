@@ -55,37 +55,41 @@ def reservar_quiosque(request, quiosque_id):
         form = ReservaForm(request.POST, request.FILES, user=request.user)
 
         if form.is_valid():
-            try:
-                # Pega o lote validado do formulário
-                lote_obj = form.cleaned_data['numero_lote_input']
+    try:
+        lote_obj = form.cleaned_data['numero_lote_input']
 
-                # Cria a reserva
-                reserva = form.save(commit=False)
-                reserva.quiosque = quiosque
-                reserva.responsavel = request.user
-                reserva.lote = lote_obj
-                reserva.valor_reserva = quiosque.valor_diaria
+        reserva = form.save(commit=False)
+        reserva.quiosque = quiosque
+        reserva.responsavel = request.user
+        reserva.lote = lote_obj
+        reserva.valor_reserva = quiosque.valor_diaria
 
-                # ✅ O comprovante já vem do form.save() automaticamente
-                # Não precisa fazer nada extra, o Django cuida disso
+        # Upload do comprovante direto para o Cloudinary
+        comprovante = request.FILES.get('comprovante_pagamento')
+        if comprovante:
+            import cloudinary.uploader
+            resultado = cloudinary.uploader.upload(
+                comprovante,
+                folder='comprovantes',
+                resource_type='auto',
+            )
+            reserva.comprovante_pagamento = resultado['secure_url']
 
-                # Atualiza dados do lote
-                if form.cleaned_data.get('nome_responsavel_input'):
-                    lote_obj.proprietario = form.cleaned_data['nome_responsavel_input']
-                if form.cleaned_data.get('telefone_contato_input'):
-                    lote_obj.telefone = form.cleaned_data['telefone_contato_input']
-                lote_obj.save()
+        if form.cleaned_data.get('nome_responsavel_input'):
+            lote_obj.proprietario = form.cleaned_data['nome_responsavel_input']
+        if form.cleaned_data.get('telefone_contato_input'):
+            lote_obj.telefone = form.cleaned_data['telefone_contato_input']
+        lote_obj.save()
 
-                # Salva a reserva
-                reserva.save()
+        reserva.save()
 
-                messages.success(
-                    request,
-                    f'✅ Sua reserva do {quiosque.get_nome_display()} '
-                    f'para o dia {reserva.data_reserva.strftime("%d/%m/%Y")} '
-                    f'foi solicitada com sucesso! Aguarde a confirmação.'
-                )
-                return redirect('reservas_quiosques:minhas_reservas')
+        messages.success(
+            request,
+            f'✅ Sua reserva do {quiosque.get_nome_display()} '
+            f'para o dia {reserva.data_reserva.strftime("%d/%m/%Y")} '
+            f'foi solicitada com sucesso! Aguarde a confirmação.'
+        )
+        return redirect('reservas_quiosques:minhas_reservas')
 
             except ValidationError as e:
                 for error in e.messages:
