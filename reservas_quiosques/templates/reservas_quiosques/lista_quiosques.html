@@ -11,7 +11,6 @@
     <p class="lead" style="color: #2d5016; font-weight: 600; text-shadow: 2px 2px 4px rgba(255,255,255,0.8);">
     Escolha seu quiosque e aproveite momentos especiais com sua família!
     </p>
-
 </div>
 
 {% if quiosques %}
@@ -20,11 +19,26 @@
         <div class="col-md-6">
             <div class="card shadow-lg h-100">
                 {% if quiosque.nome == 'AZ' %}
-                     <img src="{% static 'img/azaleia.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                    <img src="{% static 'img/azaleia.png' %}"
+                         class="card-img-top"
+                         alt="{{ quiosque.get_nome_display }}"
+                         style="height: 300px; object-fit: cover;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
                 {% elif quiosque.nome == 'PR' %}
-                     <img src="{% static 'img/primavera.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                    <img src="{% static 'img/primavera.png' %}"
+                         class="card-img-top"
+                         alt="{{ quiosque.get_nome_display }}"
+                         style="height: 300px; object-fit: cover;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
                 {% else %}
-                     <img src="{% static 'img/Quiosques.png' %}" class="card-img-top" alt="{{ quiosque.get_nome_display }}" style="height: 300px; object-fit: cover;">
+                    <img src="{% static 'img/Quiosques.png' %}"
+                         class="card-img-top"
+                         alt="{{ quiosque.get_nome_display }}"
+                         style="height: 300px; object-fit: cover;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
                 {% endif %}
 
                 <div class="card-body">
