@@ -50,7 +50,7 @@ class Reserva(models.Model):
     quantidade_pessoas = models.PositiveIntegerField(verbose_name="Quantidade de Pessoas")
     confirmada = models.BooleanField(default=False, verbose_name="Reserva Confirmada")
     valor_reserva = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor da Reserva (R$)")
-    comprovante_pagamento = models.FileField(upload_to='comprovantes/', blank=True, null=True, verbose_name="Comprovante de Pagamento")
+    comprovante_pagamento = models.CharField(max_length=500, blank=True, null=True, verbose_name="Comprovante de Pagamento")
 
     class Meta:
         verbose_name = "Reserva"
