@@ -4,19 +4,17 @@
 {% block title %}Minhas Reservas{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h2 class="display-4" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-        Minhas Reservas
-    </h2>
+<div class="text-center mb-4 mt-2">
+    <h2 style="color: #FF5A5F;">Minhas Reservas</h2>
 </div>
 
 {% if reservas %}
     <div class="row g-4">
         {% for reserva in reservas %}
         <div class="col-md-6">
-            <div class="card shadow-lg h-100">
-                <div class="card-header {% if reserva.confirmada %}bg-success{% else %}bg-warning{% endif %} text-white">
-                    <h5 class="mb-0">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header {% if reserva.confirmada %}bg-success{% else %}bg-warning{% endif %} text-white border-0">
+                    <h5 class="mb-0 fw-semibold">
                         {{ reserva.quiosque.get_nome_display }}
                         {% if reserva.confirmada %}
                             <span class="badge bg-light text-success float-end">✅ Confirmada</span>
@@ -34,7 +32,7 @@
 
                     {% if reserva.comprovante_pagamento %}
                         <p><strong>📎 Comprovante:</strong>
-                            <a href="{{ reserva.comprovante_pagamento }}" target="_blank" class="btn btn-sm btn-info">
+                            <a href="{{ reserva.comprovante_pagamento }}" target="_blank" class="btn btn-sm btn-primary">
                                 Ver arquivo
                             </a>
                         </p>
@@ -48,7 +46,7 @@
                         <form method="post" action="{% url 'reservas_quiosques:cancelar_reserva' reserva.id %}" onsubmit="return confirm('Tem certeza que deseja cancelar esta reserva?');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger w-100 mt-2">
-                                🗑️ Cancelar Reserva
+                                Cancelar Reserva
                             </button>
                         </form>
                     {% else %}
@@ -62,7 +60,7 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="card shadow-lg">
+    <div class="card shadow-sm border-0">
         <div class="card-body text-center py-5">
             <h4>📭 Você ainda não tem reservas</h4>
             <p class="text-muted">Faça sua primeira reserva agora!</p>
