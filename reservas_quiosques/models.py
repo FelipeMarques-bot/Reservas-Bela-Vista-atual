@@ -59,9 +59,23 @@ class Reserva(models.Model):
         unique_together = ['quiosque', 'data_reserva']
 
     def clean(self):
-        pass
+        if not self.data_reserva:
+            return
+
+        hoje = timezone.localdate()
+
+        if self.data_reserva < hoje:
+            raise ValidationError("Não é possível fazer reservas para datas passadas.")
+
+        # Moradores devem respeitar antecedência mínima de 2 dias.
+        # Admin/staff pode agendar sem essa restrição.
+        if not (self.responsavel and (self.responsavel.is_staff or self.responsavel.is_superuser)):
+            if self.data_reserva < hoje + timedelta(days=2):
+                raise ValidationError("A reserva deve ser feita com pelo menos 2 dias de antecedência.")
 
     def save(self, *args, **kwargs):
+        if self.quiosque_id and not self.valor_reserva:
+            self.valor_reserva = self.quiosque.valor_diaria
         super().save(*args, **kwargs)
 
     def __str__(self):
