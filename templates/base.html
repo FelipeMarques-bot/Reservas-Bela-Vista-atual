@@ -200,6 +200,87 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(107, 155, 74, 0.3);
         }
+
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+
+            .header-section {
+                padding: 16px 0;
+                margin-bottom: 20px;
+            }
+
+            .logo-container img {
+                max-width: 150px;
+            }
+
+            .logo-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .nav-menu {
+                gap: 10px;
+                padding: 6px 0;
+            }
+
+            .nav-menu a,
+            .nav-logout-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .content-wrapper {
+                padding: 0 12px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .card {
+                border-radius: 12px;
+            }
+
+            .card:hover {
+                transform: none;
+                box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+            }
+
+            .card-img-top {
+                height: 220px !important;
+                object-fit: cover;
+            }
+
+            .btn-primary,
+            .btn-success,
+            .btn-danger {
+                padding: 10px 18px;
+                font-size: 0.95rem;
+            }
+
+            .alert-success,
+            .alert-warning,
+            .alert-error,
+            .alert-danger,
+            .alert-info {
+                font-size: 0.95rem;
+                padding: 14px 16px;
+                border-radius: 10px;
+            }
+
+            .card-header .badge {
+                float: none !important;
+                display: inline-block;
+                margin-top: 8px;
+            }
+        }
     </style>
 
     {% block extra_css %}{% endblock %}

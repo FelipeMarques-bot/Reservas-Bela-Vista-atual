@@ -4,6 +4,16 @@
 
 {% block title %}Reservar {{ quiosque.get_nome_display }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    @media (max-width: 768px) {
+        .reserva-cover {
+            max-height: 220px !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-10 col-xl-9">
@@ -11,7 +21,7 @@
             <h2 class="card-title text-center mb-4" style="color: #FF5A5F;">Reservar {{ quiosque.get_nome_display }}</h2>
 
             {% if quiosque.imagem %}
-                <img src="{{ quiosque.imagem.url }}" class="img-fluid rounded mb-4" alt="{{ quiosque.get_nome_display }}" style="max-height: 320px; object-fit: cover; width: 100%;">
+                <img src="{{ quiosque.imagem.url }}" class="img-fluid rounded mb-4 reserva-cover" alt="{{ quiosque.get_nome_display }}" style="max-height: 320px; object-fit: cover; width: 100%;">
             {% endif %}
 
             <div class="card border-0 bg-light mb-4">
