@@ -4,12 +4,10 @@
 {% block title %}Quiosques Disponíveis{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h2 class="display-4" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-        Quiosques Disponíveis para Reserva
-    </h2>
-    <p class="lead" style="color: #2d5016; font-weight: 600; text-shadow: 2px 2px 4px rgba(255,255,255,0.8);">
-    Escolha seu quiosque e aproveite momentos especiais com sua família!
+<div class="text-center mb-4 mt-2">
+    <h2 style="color: #FF5A5F;">Quiosques Disponíveis para Reserva</h2>
+    <p class="lead" style="color: #2d5016; font-weight: 600;">
+        Escolha seu quiosque e aproveite momentos especiais com sua família.
     </p>
 </div>
 
@@ -17,7 +15,7 @@
     <div class="row g-4">
         {% for quiosque in quiosques %}
         <div class="col-md-6">
-            <div class="card shadow-lg h-100">
+            <div class="card shadow-sm h-100 border-0">
                 {% if quiosque.nome == 'AZ' %}
                     <img src="{% static 'img/azaleia.png' %}"
                          class="card-img-top"
@@ -42,7 +40,7 @@
                 {% endif %}
 
                 <div class="card-body">
-                    <h3 class="card-title mb-3">{{ quiosque.get_nome_display }}</h3>
+                    <h3 class="card-title mb-3" style="color: #FF5A5F;">{{ quiosque.get_nome_display }}</h3>
 
                     <div class="mb-3">
                         <p style="white-space: pre-line; color: #555;">{{ quiosque.descricao|default:"Quiosque disponível para reserva" }}</p>
@@ -64,7 +62,7 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="alert alert-warning text-center">
+    <div class="alert alert-warning text-center shadow-sm">
         <h4>Ops! Nenhum quiosque disponível para reserva no momento.</h4>
         <p>Entre em contato com o administrador para mais informações.</p>
     </div>
