@@ -133,3 +133,267 @@ body.jazzmin-login-page {
         padding: 0.45rem 0.8rem !important;
     }
 }
+
+/* Dashboard style - app like */
+.bv-admin-welcome {
+    background: linear-gradient(135deg, #2d5016 0%, #3f6d20 65%, #5f8f38 100%);
+    color: #ffffff;
+}
+
+.bv-admin-welcome .text-muted,
+.bv-admin-welcome h3,
+.bv-admin-welcome p {
+    color: #ffffff !important;
+}
+
+.bv-kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+.bv-section-card {
+    background: rgba(255, 255, 255, 0.97);
+}
+
+.bv-section-title {
+    color: #264613;
+    font-weight: 700;
+}
+
+.bv-badge-count {
+    background: #d7ebcb;
+    color: #2c5b13;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.4rem 0.65rem;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+}
+
+.bv-model-grid {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.bv-model-item {
+    border: 1px solid #dce9d4;
+    border-radius: 12px;
+    padding: 0.8rem;
+    background: #f9fcf7;
+}
+
+.bv-model-head {
+    margin-bottom: 0.6rem;
+}
+
+.bv-model-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d5016;
+}
+
+.bv-model-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.bv-model-actions .btn-success {
+    background-color: #0f6b3b !important;
+    border-color: #0f6b3b !important;
+}
+
+.bv-model-actions .btn-outline-secondary {
+    border-color: #9fb39c;
+    color: #2f4630;
+    background-color: #ffffff;
+}
+
+.bv-model-actions .btn-outline-secondary:hover {
+    background: #eff6eb;
+    border-color: #7f997a;
+    color: #1f321d;
+}
+
+.bv-timeline {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.bv-timeline-item {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    gap: 0.65rem;
+    align-items: start;
+    padding: 0.6rem;
+    border-radius: 10px;
+    background: #f8fbf6;
+    border: 1px solid #e4eddc;
+}
+
+.bv-timeline-mark {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 0.35rem;
+    background: #2d5016;
+}
+
+.bv-timeline-mark.is-add {
+    background: #19994d;
+}
+
+.bv-timeline-mark.is-change {
+    background: #2f7d32;
+}
+
+.bv-timeline-mark.is-delete {
+    background: #d64545;
+}
+
+.bv-timeline-title {
+    font-weight: 600;
+    color: #244117;
+    line-height: 1.25;
+}
+
+.bv-timeline-title a {
+    color: #2e6517;
+}
+
+.bv-timeline-meta {
+    font-size: 0.78rem;
+    color: #6b7e63;
+}
+
+@media (max-width: 991px) {
+    .bv-admin-shell {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .bv-admin-welcome {
+        border-radius: 14px;
+    }
+
+    .bv-section-title {
+        font-size: 1.12rem;
+    }
+
+    .bv-model-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .bv-model-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 0.65rem;
+    }
+
+    .content-header {
+        padding: 0.7rem 0.35rem;
+    }
+
+    .content-header .breadcrumb {
+        font-size: 0.78rem;
+    }
+
+    .bv-admin-welcome .card-body {
+        padding: 0.95rem;
+    }
+
+    .bv-admin-welcome h3 {
+        font-size: 1.28rem;
+    }
+
+    .bv-model-item {
+        padding: 0.7rem;
+    }
+
+    .bv-model-name {
+        font-size: 0.96rem;
+    }
+}
+
+/* Mobile cards for Reserva changelist */
+@media (max-width: 768px) {
+    .app-reservas_quiosques.model-reserva.change-list #result_list thead {
+        display: none;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list tbody,
+    .app-reservas_quiosques.model-reserva.change-list #result_list tr,
+    .app-reservas_quiosques.model-reserva.change-list #result_list td {
+        display: block;
+        width: 100%;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list tbody tr {
+        background: #ffffff;
+        border: 1px solid #d7e7cf;
+        border-left: 5px solid #2d5016;
+        border-radius: 12px;
+        margin-bottom: 0.85rem;
+        padding: 0.55rem 0.7rem;
+        box-shadow: 0 8px 18px rgba(25, 42, 15, 0.1);
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td {
+        border: 0 !important;
+        padding: 0.38rem 0 !important;
+        min-height: 30px;
+        position: relative;
+        text-align: right;
+        font-size: 0.89rem;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td.action-checkbox {
+        display: none;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td::before {
+        content: "";
+        float: left;
+        color: #2f4f1e;
+        font-weight: 700;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(2)::before { content: "Quiosque"; }
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(3)::before { content: "Lote"; }
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(4)::before { content: "Responsável"; }
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(5)::before { content: "Data"; }
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(6)::before { content: "Confirmada"; }
+    .app-reservas_quiosques.model-reserva.change-list #result_list td:nth-child(7)::before { content: "Valor"; }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td.field-confirmada {
+        text-align: left;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list #result_list td.field-confirmada::before {
+        float: none;
+        display: inline-block;
+        margin-right: 0.7rem;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list .paginator {
+        text-align: center;
+        font-size: 0.82rem;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list .object-tools {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .app-reservas_quiosques.model-reserva.change-list .object-tools a {
+        width: 100%;
+        text-align: center;
+    }
+}

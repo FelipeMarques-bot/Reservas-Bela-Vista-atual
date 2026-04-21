@@ -1,0 +1,104 @@
+{% extends "admin/base_site.html" %}
+{% load i18n jazzmin log %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block content_title %}{% trans 'Dashboard' %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dashboard' %}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+{% get_side_menu using="app_list" as dashboard_list %}
+
+<div class="bv-admin-shell col-12">
+    <div class="bv-admin-welcome card mb-4">
+        <div class="card-body">
+            <p class="bv-kicker mb-1">BEM-VINDO</p>
+            <h3 class="mb-1">Gestão de Quiosques</h3>
+            <p class="mb-0 text-muted">Controle total de lotes, reservas e usuários.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            {% for app in dashboard_list %}
+            <section class="bv-section-card card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="bv-section-title mb-0">{{ app.name }}</h4>
+                        <span class="badge badge-pill bv-badge-count">{{ app.models|length }} áreas</span>
+                    </div>
+
+                    <div class="bv-model-grid">
+                        {% for model in app.models %}
+                        <article class="bv-model-item">
+                            <div class="bv-model-head">
+                                <span class="bv-model-name">{{ model.name }}</span>
+                            </div>
+                            <div class="bv-model-actions">
+                                {% if model.add_url %}
+                                <a href="{{ model.add_url }}" class="btn btn-sm btn-success">
+                                    + {% trans 'Add' %}
+                                </a>
+                                {% endif %}
+
+                                {% if model.url %}
+                                    {% if model.view_only %}
+                                    <a href="{{ model.url }}" class="btn btn-sm btn-outline-secondary">
+                                        {% trans 'View' %}
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ model.url }}" class="btn btn-sm btn-outline-secondary">
+                                        {% if model.custom %}{% trans 'Go' %}{% else %}{% trans 'Change' %}{% endif %}
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+            {% endfor %}
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <section class="bv-section-card card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="bv-section-title mb-0">Ações Recentes</h4>
+                    </div>
+
+                    {% get_admin_log 8 as admin_log for_user user %}
+                    {% if not admin_log %}
+                        <p class="text-muted mb-0">Nenhuma ação recente.</p>
+                    {% else %}
+                    <div class="bv-timeline">
+                        {% for entry in admin_log %}
+                        <article class="bv-timeline-item">
+                            <div class="bv-timeline-mark {% if entry.is_deletion %}is-delete{% elif entry.is_addition %}is-add{% else %}is-change{% endif %}"></div>
+                            <div class="bv-timeline-content">
+                                <p class="bv-timeline-title mb-1">
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                </p>
+                                <p class="bv-timeline-meta mb-0">{{ entry.action_time|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
