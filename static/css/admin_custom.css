@@ -1,0 +1,135 @@
+:root {
+    --bv-primary: #2d5016;
+    --bv-primary-strong: #1f3a0f;
+    --bv-accent: #ff5a5f;
+    --bv-soft: #eef5e9;
+    --bv-surface: #ffffff;
+}
+
+/* Navbar + brand */
+.main-header.navbar {
+    background: linear-gradient(90deg, #f7fbf4 0%, #ffffff 100%) !important;
+    border-bottom: 1px solid #d8e6d0 !important;
+}
+
+.brand-link {
+    background: linear-gradient(180deg, var(--bv-primary) 0%, #3c6a1f 100%) !important;
+}
+
+.brand-text {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background: linear-gradient(180deg, #243322 0%, #1f2d1d 100%) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: var(--bv-accent) !important;
+    color: #ffffff !important;
+}
+
+/* Cards and tables */
+.content-wrapper {
+    background: #f4f7f1 !important;
+}
+
+.card {
+    border-radius: 14px !important;
+    box-shadow: 0 10px 25px rgba(26, 40, 18, 0.12) !important;
+    border: 0 !important;
+}
+
+.card-header {
+    border-top-left-radius: 14px !important;
+    border-top-right-radius: 14px !important;
+}
+
+.card-primary.card-outline {
+    border-top: 3px solid var(--bv-accent) !important;
+}
+
+.table thead th {
+    background: #f7fbf4;
+    color: #33581a;
+    font-weight: 700;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(232, 241, 227, 0.6);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+.btn-primary {
+    background-color: var(--bv-accent) !important;
+    border-color: var(--bv-accent) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #eb4a50 !important;
+    border-color: #eb4a50 !important;
+}
+
+.btn-success {
+    background-color: #1f8a43 !important;
+    border-color: #1f8a43 !important;
+}
+
+.object-tools .addlink,
+.object-tools .historylink {
+    border-radius: 10px !important;
+}
+
+/* Breadcrumb + title */
+.content-header h1 {
+    color: var(--bv-primary-strong);
+    font-weight: 700;
+}
+
+.breadcrumb-item a {
+    color: #3b6d1e;
+    font-weight: 600;
+}
+
+/* Login page */
+body.jazzmin-login-page {
+    background: linear-gradient(145deg, #f2f8ee 0%, #dbead1 100%) !important;
+}
+
+.login-box .card {
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.login-logo a {
+    color: var(--bv-primary) !important;
+    font-weight: 700;
+}
+
+.login-box .btn {
+    border-radius: 10px !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .content-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .main-header .nav-link {
+        font-size: 0.95rem;
+    }
+
+    .btn {
+        padding: 0.45rem 0.8rem !important;
+    }
+}
