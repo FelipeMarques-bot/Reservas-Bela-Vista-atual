@@ -32,9 +32,29 @@
     color: #ffffff !important;
 }
 
+.sidebar-dark-primary .nav-sidebar .nav-link,
+.sidebar-dark-primary .nav-header,
+.sidebar-dark-primary .brand-text,
+.sidebar-dark-primary .user-panel .info,
+.sidebar-dark-primary .user-panel .info a {
+    color: #eaf4e4 !important;
+}
+
 /* Cards and tables */
 .content-wrapper {
     background: #f4f7f1 !important;
+}
+
+.content,
+.content p,
+.content li,
+.content label,
+.content small,
+.content .help,
+.content .text-muted,
+.form-group label,
+.form-check-label {
+    color: #26381e !important;
 }
 
 .card {
@@ -58,6 +78,51 @@
     font-weight: 700;
 }
 
+#changelist .results,
+.change-list .table,
+.change-form .table,
+.card .table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#changelist .results tbody tr,
+.change-list .table tbody tr {
+    background: #ffffff !important;
+}
+
+#changelist .results tbody tr:nth-child(odd),
+.change-list .table-striped tbody tr:nth-of-type(odd) {
+    background: #f2f8ee !important;
+}
+
+#changelist .results td,
+#changelist .results th,
+.change-list .table td,
+.change-list .table th,
+.change-form .table td,
+.change-form .table th {
+    color: #24371c !important;
+    border-color: #d9e8d1 !important;
+    vertical-align: middle;
+}
+
+#changelist .results a,
+.change-list .table a,
+.change-form .table a {
+    color: #1f6f33 !important;
+    font-weight: 700;
+}
+
+#changelist .results .action-checkbox input {
+    transform: scale(1.1);
+}
+
+#changelist .paginator,
+.paginator {
+    color: #2c3f25 !important;
+}
+
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(232, 241, 227, 0.6);
 }
@@ -79,6 +144,29 @@
     border-color: #eb4a50 !important;
 }
 
+.btn-outline-secondary {
+    color: #2e4d22 !important;
+    border-color: #a8c2a1 !important;
+    background: #ffffff !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    color: #1f3319 !important;
+    background: #eaf4e4 !important;
+    border-color: #799974 !important;
+}
+
+.btn-danger {
+    background-color: #dc4c57 !important;
+    border-color: #dc4c57 !important;
+}
+
+.btn-info {
+    background-color: #2e8e82 !important;
+    border-color: #2e8e82 !important;
+}
+
 .btn-success {
     background-color: #1f8a43 !important;
     border-color: #1f8a43 !important;
@@ -98,6 +186,87 @@
 .breadcrumb-item a {
     color: #3b6d1e;
     font-weight: 600;
+}
+
+.content-header .breadcrumb-item,
+.content-header .breadcrumb-item.active {
+    color: #4c6650 !important;
+}
+
+/* Forms and filters */
+.form-control,
+.custom-select,
+select,
+textarea,
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="search"] {
+    background: #ffffff !important;
+    border: 1px solid #bfd5b6 !important;
+    color: #24371c !important;
+    border-radius: 10px !important;
+}
+
+.form-control::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #7d9274 !important;
+}
+
+.form-control:focus,
+select:focus,
+textarea:focus,
+input:focus {
+    border-color: #5b8b43 !important;
+    box-shadow: 0 0 0 0.2rem rgba(91, 139, 67, 0.18) !important;
+}
+
+#changelist-filter {
+    border: 1px solid #d7e6cf;
+    border-radius: 12px;
+    background: #fbfdf9;
+    padding: 0.75rem;
+}
+
+#changelist-filter h2,
+#changelist-filter h3,
+#changelist-filter li,
+#changelist-filter a {
+    color: #2a4420 !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border: 1px solid #bfd5b6 !important;
+    border-radius: 10px !important;
+    min-height: 38px;
+    background: #fff !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #2a3f21 !important;
+    line-height: 36px;
+}
+
+/* Tabs and fieldsets on change form */
+.nav-tabs .nav-link {
+    color: #3f5f2f !important;
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link.active {
+    color: #ffffff !important;
+    background: #2f6630 !important;
+    border-color: #2f6630 !important;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: #edf5e8 !important;
+    color: #2a4a1a !important;
+    border-radius: 8px;
 }
 
 /* Login page */
@@ -319,6 +488,29 @@ body.jazzmin-login-page {
 
     .bv-model-name {
         font-size: 0.96rem;
+    }
+
+    #changelist .results {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .change-list .actions {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .change-list .actions select,
+    .change-list .actions .button,
+    .change-list .actions .btn,
+    .change-list #searchbar,
+    .change-list #changelist-search .btn,
+    .change-list #toolbar input,
+    .change-list #toolbar select {
+        width: 100% !important;
+        max-width: none !important;
     }
 }
 
