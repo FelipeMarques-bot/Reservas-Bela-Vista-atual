@@ -36,3 +36,16 @@ class ReservaAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form_class = super().get_form(request, obj, **kwargs)
+
+        class ReservaAdminForm(form_class):
+            def clean(self):
+                cleaned_data = super().clean()
+                self.instance._usuario_admin_requisicao = bool(
+                    request.user.is_staff or request.user.is_superuser
+                )
+                return cleaned_data
+
+        return ReservaAdminForm

@@ -68,8 +68,13 @@ class Reserva(models.Model):
             raise ValidationError("Não é possível fazer reservas para datas passadas.")
 
         # Moradores devem respeitar antecedência mínima de 2 dias.
-        # Admin/staff pode agendar sem essa restrição.
-        if not (self.responsavel and (self.responsavel.is_staff or self.responsavel.is_superuser)):
+        # Admin/staff pode agendar sem essa restrição (inclusive pelo Django Admin).
+        admin_no_responsavel = bool(
+            self.responsavel and (self.responsavel.is_staff or self.responsavel.is_superuser)
+        )
+        admin_na_requisicao = bool(getattr(self, '_usuario_admin_requisicao', False))
+
+        if not (admin_no_responsavel or admin_na_requisicao):
             if self.data_reserva < hoje + timedelta(days=2):
                 raise ValidationError("A reserva deve ser feita com pelo menos 2 dias de antecedência.")
 
