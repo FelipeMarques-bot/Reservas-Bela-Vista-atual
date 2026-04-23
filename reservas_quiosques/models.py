@@ -62,6 +62,11 @@ class Reserva(models.Model):
         if not self.data_reserva:
             return
 
+        if not self.comprovante_pagamento:
+            raise ValidationError({
+                'comprovante_pagamento': 'O comprovante de pagamento é obrigatório para salvar a reserva.'
+            })
+
         hoje = timezone.localdate()
 
         if self.data_reserva < hoje:

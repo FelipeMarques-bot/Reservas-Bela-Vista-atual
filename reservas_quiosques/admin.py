@@ -41,6 +41,10 @@ class ReservaAdmin(admin.ModelAdmin):
         form_class = super().get_form(request, obj, **kwargs)
 
         class ReservaAdminForm(form_class):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.fields['comprovante_pagamento'].required = True
+
             def clean(self):
                 cleaned_data = super().clean()
                 self.instance._usuario_admin_requisicao = bool(

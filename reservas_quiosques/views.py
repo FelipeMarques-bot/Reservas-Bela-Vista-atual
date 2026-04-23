@@ -45,6 +45,12 @@ def reservar_quiosque(request, quiosque_id):
         if form.is_valid():
             try:
                 lote_obj = form.cleaned_data['numero_lote_input']
+                comprovante = request.FILES.get('comprovante_pagamento')
+
+                if not comprovante:
+                    messages.error(request, '❌ O comprovante de pagamento é obrigatório para salvar a reserva.')
+                    context = {'form': form, 'quiosque': quiosque}
+                    return render(request, 'reservas_quiosques/reservar_quiosque.html', context)
 
                 reserva = form.save(commit=False)
                 reserva.quiosque = quiosque
@@ -52,7 +58,6 @@ def reservar_quiosque(request, quiosque_id):
                 reserva.lote = lote_obj
                 reserva.valor_reserva = quiosque.valor_diaria
 
-                comprovante = request.FILES.get('comprovante_pagamento')
                 if comprovante:
                     resultado = cloudinary.uploader.upload(
                         comprovante,
