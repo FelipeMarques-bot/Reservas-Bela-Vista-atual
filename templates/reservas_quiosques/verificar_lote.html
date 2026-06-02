@@ -6,8 +6,11 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card shadow-sm p-4 mt-4">
-            <h2 class="card-title text-center mb-3" style="color: #FF5A5F;">Reservar {{ quiosque.get_nome_display }}</h2>
+        <div class="form-card shadow-sm mt-4">
+            <div class="section-heading mb-4">
+                <span class="iconify" data-icon="mdi:home-search" data-inline="false" style="font-size: 2.5rem; color: #FF5A5F;"></span>
+                <h2>Reservar {{ quiosque.get_nome_display }}</h2>
+            </div>
             <p class="text-muted text-center mb-4">Para continuar, informe o número do seu lote.</p>
 
             <form method="post">

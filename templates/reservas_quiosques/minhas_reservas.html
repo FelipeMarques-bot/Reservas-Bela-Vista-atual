@@ -4,15 +4,16 @@
 {% block title %}Minhas Reservas{% endblock %}
 
 {% block content %}
-<div class="text-center mb-4 mt-2">
-    <h2 style="color: #FF5A5F;">Minhas Reservas</h2>
+<div class="text-center mb-4 mt-2 section-heading">
+    <span class="iconify" data-icon="mdi:calendar-check" data-inline="false" style="font-size: 2.6rem; color: #FF5A5F;"></span>
+    <h2>Minhas Reservas</h2>
 </div>
 
 {% if reservas %}
     <div class="row g-4">
         {% for reserva in reservas %}
         <div class="col-md-6">
-            <div class="card shadow-sm h-100 border-0">
+            <div class="card shadow-sm h-100 border-0 section-card">
                 <div class="card-header {% if reserva.confirmada %}bg-success{% else %}bg-warning{% endif %} text-white border-0">
                     <h5 class="mb-0 fw-semibold">
                         {{ reserva.quiosque.get_nome_display }}
@@ -24,11 +25,11 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>📅 Data:</strong> {{ reserva.data_reserva|date:"d/m/Y" }}</p>
-                    <p><strong>🏠 Lote:</strong> {{ reserva.lote.numero_lote }}</p>
-                    <p><strong>👥 Pessoas:</strong> {{ reserva.quantidade_pessoas }}</p>
-                    <p><strong>💰 Valor:</strong> R$ {{ reserva.valor_reserva }}</p>
-                    <p><strong>📋 Solicitada em:</strong> {{ reserva.data_solicitacao|date:"d/m/Y H:i" }}</p>
+                    <p><span class="iconify" data-icon="mdi:calendar" data-inline="false"></span> <strong>Data:</strong> {{ reserva.data_reserva|date:"d/m/Y" }}</p>
+                    <p><span class="iconify" data-icon="mdi:home-circle" data-inline="false"></span> <strong>Lote:</strong> {{ reserva.lote.numero_lote }}</p>
+                    <p><span class="iconify" data-icon="mdi:account-group" data-inline="false"></span> <strong>Pessoas:</strong> {{ reserva.quantidade_pessoas }}</p>
+                    <p><span class="iconify" data-icon="mdi:currency-brl" data-inline="false"></span> <strong>Valor:</strong> R$ {{ reserva.valor_reserva }}</p>
+                    <p><span class="iconify" data-icon="mdi:clock-outline" data-inline="false"></span> <strong>Solicitada em:</strong> {{ reserva.data_solicitacao|date:"d/m/Y H:i" }}</p>
 
                     {% if reserva.comprovante_pagamento %}
                         <p><strong>📎 Comprovante:</strong>

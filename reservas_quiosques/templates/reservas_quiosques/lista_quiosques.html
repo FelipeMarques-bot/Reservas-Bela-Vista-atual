@@ -4,39 +4,41 @@
 {% block title %}Quiosques Disponíveis{% endblock %}
 
 {% block content %}
-<div class="text-center mb-4 mt-2">
-    <h2 style="color: #FF5A5F;">Quiosques Disponíveis para Reserva</h2>
-    <p class="lead" style="color: #2d5016; font-weight: 600;">
-        Escolha seu quiosque e aproveite momentos especiais com sua família.
-    </p>
+<div class="text-center mb-4 mt-2 page-heading">
+    <span class="iconify hero-icon" data-icon="mdi:beach" data-inline="false" style="font-size: 3rem; color: #FF5A5F; margin-bottom: 14px;"></span>
+    <h2>Quiosques Disponíveis para Reserva</h2>
+    <p class="lead">Escolha seu quiosque e aproveite momentos especiais com sua família.</p>
 </div>
 
 {% if quiosques %}
     <div class="row g-4">
         {% for quiosque in quiosques %}
         <div class="col-md-6">
-            <div class="card shadow-sm h-100 border-0">
+            <div class="card shadow-sm h-100 border-0 card-quiosque" data-anime="card">
+                <div class="card-accent">
+                    <span class="iconify" data-icon="mdi:umbrella-beach" data-inline="false"></span>
+                </div>
                 {% if quiosque.nome == 'AZ' %}
                     <img src="{% static 'img/azaleia.png' %}"
                          class="card-img-top"
                          alt="{{ quiosque.get_nome_display }}"
                          style="height: 300px; object-fit: cover;"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f5f7f1; font-size:80px;">🏡</div>
                 {% elif quiosque.nome == 'PR' %}
                     <img src="{% static 'img/primavera.png' %}"
                          class="card-img-top"
                          alt="{{ quiosque.get_nome_display }}"
                          style="height: 300px; object-fit: cover;"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f5f7f1; font-size:80px;">🏡</div>
                 {% else %}
                     <img src="{% static 'img/Quiosques.png' %}"
                          class="card-img-top"
                          alt="{{ quiosque.get_nome_display }}"
                          style="height: 300px; object-fit: cover;"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f0f0f0; font-size:80px;">🏡</div>
+                    <div style="display:none; height:300px; align-items:center; justify-content:center; background:#f5f7f1; font-size:80px;">🏡</div>
                 {% endif %}
 
                 <div class="card-body">
@@ -46,9 +48,9 @@
                         <p style="white-space: pre-line; color: #555;">{{ quiosque.descricao|default:"Quiosque disponível para reserva" }}</p>
                     </div>
 
-                    <ul class="list-unstyled mb-4">
-                        <li class="mb-2"><strong>👥 Capacidade:</strong> {{ quiosque.capacidade_maxima }} pessoas</li>
-                        <li class="mb-2"><strong>💰 Valor:</strong> R$ {{ quiosque.valor_diaria }}</li>
+                    <ul class="feature-list mb-4">
+                        <li><span class="iconify" data-icon="mdi:account-group" data-inline="false"></span><strong>Capacidade:</strong> {{ quiosque.capacidade_maxima }} pessoas</li>
+                        <li><span class="iconify" data-icon="mdi:currency-brl" data-inline="false"></span><strong>Valor:</strong> R$ {{ quiosque.valor_diaria|floatformat:2 }}</li>
                     </ul>
                 </div>
 
@@ -67,4 +69,44 @@
         <p>Entre em contato com o administrador para mais informações.</p>
     </div>
 {% endif %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof anime !== 'undefined') {
+            anime.timeline({
+                easing: 'easeOutQuad',
+                duration: 700
+            })
+            .add({
+                targets: '.page-heading',
+                opacity: [0, 1],
+                translateY: [20, 0]
+            })
+            .add({
+                targets: '.card-quiosque',
+                opacity: [0, 1],
+                translateY: [35, 0],
+                delay: anime.stagger(120)
+            }, '-=400');
+
+            anime({
+                targets: '.card-accent',
+                translateY: [-10, 0],
+                opacity: [0, 1],
+                duration: 1100,
+                easing: 'easeOutElastic(1, .8)'
+            });
+
+            anime({
+                targets: '.iconify[data-icon]',
+                scale: [0.95, 1.05],
+                duration: 1800,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+        }
+    });
+</script>
 {% endblock %}

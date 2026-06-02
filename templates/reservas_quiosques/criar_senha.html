@@ -6,10 +6,13 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card shadow-sm p-4 mt-4">
-            <h2 class="card-title text-center mb-3" style="color: #FF5A5F;">Bem-vindo, {{ lote.proprietario }}!</h2>
+        <div class="form-card shadow-sm mt-4">
+            <div class="section-heading mb-4">
+                <span class="iconify" data-icon="mdi:shield-key" data-inline="false" style="font-size: 2.5rem; color: #FF5A5F;"></span>
+                <h2>Bem-vindo, {{ lote.proprietario }}!</h2>
+            </div>
 
-            <div class="alert alert-info">
+            <div class="info-box mb-4">
                 <strong>Lote {{ lote.numero_lote }}</strong> encontrado.<br>
                 Crie sua senha para continuar com a reserva.
             </div>

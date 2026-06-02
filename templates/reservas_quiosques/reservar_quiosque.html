@@ -17,14 +17,17 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-10 col-xl-9">
-        <div class="card shadow-sm p-4 mt-3 mb-4">
-            <h2 class="card-title text-center mb-4" style="color: #FF5A5F;">Reservar {{ quiosque.get_nome_display }}</h2>
+        <div class="form-card shadow-sm mt-3 mb-4">
+            <div class="section-heading mb-4">
+                <span class="iconify" data-icon="mdi:table-chair" data-inline="false" style="font-size: 2.6rem; color: #FF5A5F;"></span>
+                <h2>Reservar {{ quiosque.get_nome_display }}</h2>
+            </div>
 
             {% if quiosque.imagem %}
                 <img src="{{ quiosque.imagem.url }}" class="img-fluid rounded mb-4 reserva-cover" alt="{{ quiosque.get_nome_display }}" style="max-height: 320px; object-fit: cover; width: 100%;">
             {% endif %}
 
-            <div class="card border-0 bg-light mb-4">
+            <div class="info-box mb-4">
                 <div class="card-body">
                     <h5 class="mb-3" style="color: #2d5016;">Informações do Quiosque</h5>
                     <ul class="list-unstyled mb-0">
@@ -37,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="card border-0 bg-light mb-4">
+            <div class="info-box mb-4">
                 <div class="card-body">
                     <h5 class="mb-3" style="color: #2d5016;">Dados para pagamento</h5>
                     <p class="mb-1"><strong>Banco:</strong> Nubank</p>
