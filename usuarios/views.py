@@ -9,25 +9,32 @@ from django.core.exceptions import ValidationError
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    error_messages = {
-        **AuthenticationForm.error_messages,
-        'inactive': 'Entre em contato com o adminsitrador do condomínio',
-    }
 
     def clean(self):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 
+        print(f"\n--- DEBUG: Tentativa de login para o usuário: {username} ---") # DEBUG
+
         if username and password:
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                user = None
+            user = authenticate(username=username, password=password)
+            print(f"--- DEBUG: Resultado de authenticate(): {user} ---") # DEBUG
 
-            if user and not user.is_active and user.check_password(password):
-                raise ValidationError(self.error_messages['inactive'], code='inactive')
+            if user is None:
+                try:
+                    existing_user = User.objects.get(username=username)
+                    if not existing_user.is_active:
+                        print(f"--- DEBUG: Usuário encontrado no DB: {existing_user.username}, is_active: {existing_user.is_active} ---") # DEBUG
+                        raise ValidationError(
+                            "Entre em contato com o administrador do condomínio.",
+                            code='inactive'
+                        )
+                except User.DoesNotExist:
+                    print("--- DEBUG: Usuário não encontrado no DB. ---") # DEBUG
+                    pass
 
-        return super().clean()
+        print("--- DEBUG: Chamando super().clean() ---") # DEBUG
+        return super().clean()    
 
 
 class CustomLoginView(LoginView):
@@ -35,48 +42,14 @@ class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
 
     def form_invalid(self, form):
-        """Handle form submission with errors"""
-        username = self.request.POST.get('username')
-        password = self.request.POST.get('password')
-        
-        if username and password:
-            try:
-                user = User.objects.get(username=username)
-                if user and not user.is_active:
-                    if user.check_password(password):
-                        messages.error(self.request, "❌ Entre em contato com o administrador do condomínio")
-                    else:
-                        messages.error(self.request, "❌ Usuário ou senha incorretos.")
-            except User.DoesNotExist:
-                messages.error(self.request, "❌ Usuário ou senha incorretos.")
-        
-        return super().form_invalid(form)
-
-def login_view(request):
-    """View de login"""
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            user = None
-
-        if user and not user.is_active and user.check_password(password):
-            messages.error(request, "❌ Entre em contato com o administrador do condomínio")
-            return render(request, 'usuarios/login.html')
-
-        authenticated_user = authenticate(request, username=username, password=password)
-
-        if authenticated_user is not None:
-            login(request, authenticated_user)
-            messages.success(request, f"✅ Bem-vindo, {authenticated_user.first_name or authenticated_user.username}!")
-            return redirect('reservas_quiosques:lista_quiosques')
+        print(f"--- DEBUG: form_invalid() chamado. Erros do formulário: {form.errors} ---") # DEBUG
+        if form.errors.get('__all__') and any(e.code == 'inactive' for e in form.errors.get('__all__')):
+            messages.error(self.request, "❌ Entre em contato com o administrador do condomínio.")
+            print("--- DEBUG: Mensagem de usuário inativo adicionada. ---") # DEBUG
         else:
-            messages.error(request, "❌ Usuário ou senha incorretos.")
-
-    return render(request, 'usuarios/login.html')
+            messages.error(self.request, "❌ Usuário ou senha incorretos.")
+            print("--- DEBUG: Mensagem de credenciais incorretas adicionada. ---") # DEBUG
+        return super().form_invalid(form)
 
 
 @login_required
