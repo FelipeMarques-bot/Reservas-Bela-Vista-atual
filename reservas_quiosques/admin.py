@@ -1,4 +1,8 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.http import HttpResponseRedirect
+from django.urls import path, reverse
+from django.utils.html import format_html
+from django.contrib.auth.models import User
 from .models import Quiosque, Lote, Reserva
 
 @admin.register(Quiosque)
@@ -10,10 +14,159 @@ class QuiosqueAdmin(admin.ModelAdmin):
 
 @admin.register(Lote)
 class LoteAdmin(admin.ModelAdmin):
-    list_display = ['numero_lote', 'proprietario', 'telefone', 'usuario']
+    change_list_template = 'admin/reservas_quiosques/lote/change_list.html'
+    list_display = ['numero_lote', 'proprietario', 'telefone', 'usuario', 'status_acesso', 'acoes_acesso']
     search_fields = ['numero_lote', 'proprietario']
     list_filter = ['usuario']
     readonly_fields = ['usuario']  # Não permite editar o usuário vinculado manualmente
+    actions = ['bloquear_acesso_lotes', 'desbloquear_acesso_lotes', 'criar_usuario_lotes']
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<int:lote_id>/bloquear-usuario/',
+                self.admin_site.admin_view(self.bloquear_usuario_lote_view),
+                name='reservas_quiosques_lote_bloquear_usuario',
+            ),
+            path(
+                '<int:lote_id>/desbloquear-usuario/',
+                self.admin_site.admin_view(self.desbloquear_usuario_lote_view),
+                name='reservas_quiosques_lote_desbloquear_usuario',
+            ),
+            path(
+                '<int:lote_id>/criar-usuario/',
+                self.admin_site.admin_view(self.criar_usuario_lote_view),
+                name='reservas_quiosques_lote_criar_usuario',
+            ),
+        ]
+        return custom_urls + urls
+
+    @admin.display(description='Status de Acesso')
+    def status_acesso(self, obj):
+        if not obj.usuario:
+            return format_html('<span class="bv-user-status is-blocked">Sem usuário</span>')
+        if obj.usuario.is_active:
+            return format_html('<span class="bv-user-status is-active">Ativo</span>')
+        return format_html('<span class="bv-user-status is-blocked">Bloqueado</span>')
+
+    @admin.display(description='Ações de Acesso')
+    def acoes_acesso(self, obj):
+        if not obj.usuario:
+            criar_url = reverse('admin:reservas_quiosques_lote_criar_usuario', args=[obj.pk])
+            return format_html(
+                '<a class="bv-user-inline-action is-unblock" href="{}">Criar usuário</a>',
+                criar_url,
+            )
+
+        if obj.usuario.is_active:
+            bloquear_url = reverse('admin:reservas_quiosques_lote_bloquear_usuario', args=[obj.pk])
+            return format_html(
+                '<a class="bv-user-inline-action is-block" href="{}">Bloquear</a>',
+                bloquear_url,
+            )
+
+        desbloquear_url = reverse('admin:reservas_quiosques_lote_desbloquear_usuario', args=[obj.pk])
+        return format_html(
+            '<a class="bv-user-inline-action is-unblock" href="{}">Desbloquear</a>',
+            desbloquear_url,
+        )
+
+    @admin.action(description='Bloquear usuários vinculados aos lotes selecionados')
+    def bloquear_acesso_lotes(self, request, queryset):
+        vinculados = queryset.exclude(usuario__isnull=True)
+        total = User.objects.filter(pk__in=vinculados.values_list('usuario_id', flat=True), is_active=True).update(is_active=False)
+        sem_usuario = queryset.filter(usuario__isnull=True).count()
+        self.message_user(request, f'{total} usuário(s) bloqueado(s) com sucesso.', level=messages.SUCCESS)
+        if sem_usuario:
+            self.message_user(request, f'{sem_usuario} lote(s) não possuem usuário vinculado.', level=messages.WARNING)
+
+    @admin.action(description='Desbloquear usuários vinculados aos lotes selecionados')
+    def desbloquear_acesso_lotes(self, request, queryset):
+        vinculados = queryset.exclude(usuario__isnull=True)
+        total = User.objects.filter(pk__in=vinculados.values_list('usuario_id', flat=True), is_active=False).update(is_active=True)
+        sem_usuario = queryset.filter(usuario__isnull=True).count()
+        self.message_user(request, f'{total} usuário(s) desbloqueado(s) com sucesso.', level=messages.SUCCESS)
+        if sem_usuario:
+            self.message_user(request, f'{sem_usuario} lote(s) não possuem usuário vinculado.', level=messages.WARNING)
+
+    @admin.action(description='Criar usuário para lotes selecionados sem vínculo')
+    def criar_usuario_lotes(self, request, queryset):
+        criados = 0
+        pulados = 0
+
+        for lote in queryset.select_related('usuario'):
+            if lote.usuario_id:
+                pulados += 1
+                continue
+
+            username = f'lote{lote.numero_lote}'.lower().replace(' ', '')
+            if User.objects.filter(username=username).exists():
+                pulados += 1
+                continue
+
+            user = User.objects.create_user(
+                username=username,
+                password='senha123',
+                first_name=lote.proprietario,
+            )
+            lote.usuario = user
+            lote.save(update_fields=['usuario'])
+            criados += 1
+
+        if criados:
+            self.message_user(request, f'{criados} usuário(s) criado(s) com senha temporária "senha123".', level=messages.SUCCESS)
+        if pulados:
+            self.message_user(request, f'{pulados} lote(s) foram ignorados (já vinculados ou username existente).', level=messages.WARNING)
+
+    def bloquear_usuario_lote_view(self, request, lote_id):
+        lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
+        if lote and lote.usuario:
+            lote.usuario.is_active = False
+            lote.usuario.save(update_fields=['is_active'])
+            self.message_user(request, f'Usuário do lote {lote.numero_lote} bloqueado com sucesso.', level=messages.SUCCESS)
+        else:
+            self.message_user(request, 'Lote sem usuário vinculado.', level=messages.WARNING)
+        return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
+    def desbloquear_usuario_lote_view(self, request, lote_id):
+        lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
+        if lote and lote.usuario:
+            lote.usuario.is_active = True
+            lote.usuario.save(update_fields=['is_active'])
+            self.message_user(request, f'Usuário do lote {lote.numero_lote} desbloqueado com sucesso.', level=messages.SUCCESS)
+        else:
+            self.message_user(request, 'Lote sem usuário vinculado.', level=messages.WARNING)
+        return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
+    def criar_usuario_lote_view(self, request, lote_id):
+        lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
+        if not lote:
+            self.message_user(request, 'Lote não encontrado.', level=messages.ERROR)
+            return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
+        if lote.usuario_id:
+            self.message_user(request, f'O lote {lote.numero_lote} já possui usuário vinculado.', level=messages.WARNING)
+            return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
+        username = f'lote{lote.numero_lote}'.lower().replace(' ', '')
+        if User.objects.filter(username=username).exists():
+            self.message_user(request, f'O username {username} já existe. Crie manualmente em Usuários.', level=messages.WARNING)
+            return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
+        user = User.objects.create_user(
+            username=username,
+            password='senha123',
+            first_name=lote.proprietario,
+        )
+        lote.usuario = user
+        lote.save(update_fields=['usuario'])
+        self.message_user(
+            request,
+            f'Usuário {username} criado e vinculado ao lote {lote.numero_lote} com senha temporária "senha123".',
+            level=messages.SUCCESS,
+        )
+        return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
 
 @admin.register(Reserva)
 class ReservaAdmin(admin.ModelAdmin):

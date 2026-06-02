@@ -1,0 +1,64 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+<li>
+    <a href="#" class="btn btn-sm btn-danger bv-user-action-btn" data-admin-action="bloquear_acesso_lotes">
+        Bloquear usuários dos lotes
+    </a>
+</li>
+<li>
+    <a href="#" class="btn btn-sm btn-success bv-user-action-btn" data-admin-action="desbloquear_acesso_lotes">
+        Desbloquear usuários dos lotes
+    </a>
+</li>
+<li>
+    <a href="#" class="btn btn-sm btn-info bv-user-action-btn" data-admin-action="criar_usuario_lotes">
+        Criar usuários dos lotes
+    </a>
+</li>
+{{ block.super }}
+{% endblock %}
+
+{% block result_list %}
+<div class="bv-user-toolbar">
+    <p class="bv-user-toolbar-title">Ações rápidas por lotes selecionados:</p>
+    <a href="#" class="btn btn-sm btn-danger bv-user-action-btn" data-admin-action="bloquear_acesso_lotes">Bloquear usuários</a>
+    <a href="#" class="btn btn-sm btn-success bv-user-action-btn" data-admin-action="desbloquear_acesso_lotes">Desbloquear usuários</a>
+    <a href="#" class="btn btn-sm btn-info bv-user-action-btn" data-admin-action="criar_usuario_lotes">Criar usuários</a>
+</div>
+{{ block.super }}
+
+<script>
+(function () {
+    function executarAcao(nomeAcao) {
+        const selecionados = document.querySelectorAll('input.action-select:checked');
+        if (!selecionados.length) {
+            window.alert('Selecione pelo menos um lote para continuar.');
+            return;
+        }
+
+        const selectAcao = document.querySelector('select[name="action"]');
+        const formulario = document.getElementById('changelist-form');
+
+        if (!selectAcao || !formulario) {
+            window.alert('Não foi possível localizar o formulário de ações do admin.');
+            return;
+        }
+
+        selectAcao.value = nomeAcao;
+        formulario.submit();
+    }
+
+    document.addEventListener('click', function (event) {
+        const botao = event.target.closest('.bv-user-action-btn');
+        if (!botao) {
+            return;
+        }
+
+        event.preventDefault();
+        const nomeAcao = botao.getAttribute('data-admin-action');
+        executarAcao(nomeAcao);
+    });
+})();
+</script>
+{% endblock %}
