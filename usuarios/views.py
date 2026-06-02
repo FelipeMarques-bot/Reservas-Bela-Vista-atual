@@ -34,6 +34,24 @@ class CustomLoginView(LoginView):
     template_name = 'usuarios/login.html'
     authentication_form = CustomAuthenticationForm
 
+    def form_invalid(self, form):
+        """Handle form submission with errors"""
+        username = self.request.POST.get('username')
+        password = self.request.POST.get('password')
+        
+        if username and password:
+            try:
+                user = User.objects.get(username=username)
+                if user and not user.is_active:
+                    if user.check_password(password):
+                        messages.error(self.request, "❌ Entre em contato com o administrador do condomínio")
+                    else:
+                        messages.error(self.request, "❌ Usuário ou senha incorretos.")
+            except User.DoesNotExist:
+                messages.error(self.request, "❌ Usuário ou senha incorretos.")
+        
+        return super().form_invalid(form)
+
 def login_view(request):
     """View de login"""
     if request.method == 'POST':
