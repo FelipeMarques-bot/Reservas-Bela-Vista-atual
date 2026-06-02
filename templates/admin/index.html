@@ -16,13 +16,46 @@
 {% get_side_menu using="app_list" as dashboard_list %}
 
 <div class="bv-admin-shell col-12">
-    <div class="bv-admin-welcome card mb-4">
+    <section class="bv-hero card mb-4">
         <div class="card-body">
-            <p class="bv-kicker mb-1">BEM-VINDO</p>
-            <h3 class="mb-1">Gestão de Quiosques</h3>
-            <p class="mb-0 text-muted">Controle total de lotes, reservas e usuários.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-xl-8">
+                    <p class="bv-kicker mb-2">PAINEL OPERACIONAL</p>
+                    <h2 class="mb-2">Gestão Profissional de Reservas</h2>
+                    <p class="mb-0">Acompanhe usuários, lotes, quiosques e reservas em um único lugar, com atalhos diretos para as tarefas mais frequentes.</p>
+                </div>
+                <div class="col-12 col-xl-4 mt-3 mt-xl-0">
+                    <div class="bv-hero-actions">
+                        <a href="{% url 'admin:auth_user_changelist' %}" class="btn btn-light btn-block">Gerenciar Usuários</a>
+                        <a href="{% url 'admin:reservas_quiosques_reserva_changelist' %}" class="btn btn-outline-light btn-block">Ver Reservas</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="bv-kpi-grid mb-4">
+        <article class="bv-kpi-card">
+            <p class="bv-kpi-label mb-1">Usuários</p>
+            <h3 class="bv-kpi-value mb-2">Controle de acesso</h3>
+            <a href="{% url 'admin:auth_user_changelist' %}" class="bv-kpi-link">Abrir painel</a>
+        </article>
+        <article class="bv-kpi-card">
+            <p class="bv-kpi-label mb-1">Reservas</p>
+            <h3 class="bv-kpi-value mb-2">Aprovações e histórico</h3>
+            <a href="{% url 'admin:reservas_quiosques_reserva_changelist' %}" class="bv-kpi-link">Acompanhar</a>
+        </article>
+        <article class="bv-kpi-card">
+            <p class="bv-kpi-label mb-1">Quiosques</p>
+            <h3 class="bv-kpi-value mb-2">Disponibilidade</h3>
+            <a href="{% url 'admin:reservas_quiosques_quiosque_changelist' %}" class="bv-kpi-link">Administrar</a>
+        </article>
+        <article class="bv-kpi-card">
+            <p class="bv-kpi-label mb-1">Lotes</p>
+            <h3 class="bv-kpi-value mb-2">Vínculo com usuários</h3>
+            <a href="{% url 'admin:reservas_quiosques_lote_changelist' %}" class="bv-kpi-link">Revisar</a>
+        </article>
+    </section>
 
     <div class="row">
         <div class="col-12 col-xl-8">
@@ -39,22 +72,25 @@
                         <article class="bv-model-item">
                             <div class="bv-model-head">
                                 <span class="bv-model-name">{{ model.name }}</span>
+                                {% if model.url %}
+                                <a href="{{ model.url }}" class="bv-model-link">Abrir</a>
+                                {% endif %}
                             </div>
                             <div class="bv-model-actions">
                                 {% if model.add_url %}
                                 <a href="{{ model.add_url }}" class="btn btn-sm btn-success">
-                                    + {% trans 'Add' %}
+                                    + Adicionar
                                 </a>
                                 {% endif %}
 
                                 {% if model.url %}
                                     {% if model.view_only %}
                                     <a href="{{ model.url }}" class="btn btn-sm btn-outline-secondary">
-                                        {% trans 'View' %}
+                                        Visualizar
                                     </a>
                                     {% else %}
                                     <a href="{{ model.url }}" class="btn btn-sm btn-outline-secondary">
-                                        {% if model.custom %}{% trans 'Go' %}{% else %}{% trans 'Change' %}{% endif %}
+                                        {% if model.custom %}Acessar{% else %}Gerenciar{% endif %}
                                     </a>
                                     {% endif %}
                                 {% endif %}
@@ -73,10 +109,11 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="bv-section-title mb-0">Controle de Acesso</h4>
                     </div>
-                    <p class="text-muted mb-3">Bloqueie ou desbloqueie usuários no painel de autenticação.</p>
-                    <a href="{% url 'admin:auth_user_changelist' %}" class="btn btn-danger btn-block">
-                        Bloquear/Desbloquear Usuários
-                    </a>
+                    <p class="text-muted mb-3">Bloqueie ou desbloqueie usuários com botões diretos na lista de usuários.</p>
+                    <div class="bv-access-actions">
+                        <a href="{% url 'admin:auth_user_changelist' %}" class="btn btn-danger btn-block">Abrir Usuários</a>
+                        <a href="{% url 'admin:auth_group_changelist' %}" class="btn btn-outline-secondary btn-block">Gerenciar Grupos</a>
+                    </div>
                 </div>
             </section>
 
