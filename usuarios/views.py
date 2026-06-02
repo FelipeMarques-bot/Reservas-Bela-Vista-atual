@@ -40,11 +40,20 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
 
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"✅ Bem-vindo, {user.first_name or user.username}!")
+        if user and not user.is_active and user.check_password(password):
+            messages.error(request, "❌ Entre em contato com o administrador do condomínio")
+            return render(request, 'usuarios/login.html')
+
+        authenticated_user = authenticate(request, username=username, password=password)
+
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+            messages.success(request, f"✅ Bem-vindo, {authenticated_user.first_name or authenticated_user.username}!")
             return redirect('reservas_quiosques:lista_quiosques')
         else:
             messages.error(request, "❌ Usuário ou senha incorretos.")

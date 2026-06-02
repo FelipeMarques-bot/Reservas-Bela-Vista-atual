@@ -24,7 +24,10 @@
             </div>
 
             {% if quiosque.imagem %}
-                <img src="{{ quiosque.imagem.url }}" class="img-fluid rounded mb-4 reserva-cover" alt="{{ quiosque.get_nome_display }}" style="max-height: 320px; object-fit: cover; width: 100%;">
+                <img src="{{ quiosque.imagem.url }}" class="img-fluid rounded mb-4 reserva-cover" alt="{{ quiosque.get_nome_display }}" style="max-height: 320px; object-fit: cover; width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display:none; height:320px; align-items:center; justify-content:center; background: linear-gradient(135deg, #ff7043 0%, #ff9800 25%, #ffc107 45%, #8bc34a 70%, #4caf50 100%); border-radius: 12px; margin-bottom: 1.5rem; color: white; font-size: 5rem;" class="mb-4">🏡</div>
+            {% else %}
+                <div style="height:320px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #ff7043 0%, #ff9800 25%, #ffc107 45%, #8bc34a 70%, #4caf50 100%); border-radius: 12px; margin-bottom: 1.5rem; color: white; font-size: 5rem;" class="mb-4">🏡</div>
             {% endif %}
 
             <div class="info-box mb-4">

@@ -67,9 +67,57 @@
         }
 
         .content-wrapper {
-            max-width: 1180px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px 60px;
+        }
+
+        @media (max-width: 576px) {
+            .content-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            .header-section {
+                padding: 12px 0;
+                margin-bottom: 16px;
+            }
+
+            .logo-container {
+                margin-bottom: 12px;
+            }
+
+            .logo-container img {
+                max-width: 140px;
+            }
+
+            .logo-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .nav-menu {
+                gap: 8px;
+                padding: 6px 0;
+            }
+
+            .nav-menu a,
+            .nav-logout-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
+            .page-heading {
+                padding: 14px 16px 16px;
+                margin-bottom: 24px;
+            }
+
+            .page-heading h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-card,
+            .section-card {
+                padding: 1.2rem;
+            }
         }
 
         .page-heading {
@@ -423,7 +471,7 @@
 </head>
 <body>
     <div class="header-section">
-        <div class="container">
+        <div class="container-fluid px-lg-5">
             <div class="logo-container">
                 <a href="{% url 'reservas_quiosques:lista_quiosques' %}" style="text-decoration: none;">
                     <img src="{% static 'img/condominio_bela_vista_fundo.png' %}" alt="Condomínio Bela Vista" style="max-height: 100px; width: auto;">
