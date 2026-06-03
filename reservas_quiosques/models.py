@@ -31,6 +31,7 @@ class Lote(models.Model):
     proprietario = models.CharField(max_length=100, verbose_name="Nome do Proprietário")
     telefone = models.CharField(max_length=15, blank=True, null=True, verbose_name="Telefone de Contato")
     usuario = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='lote', verbose_name="Usuário Vinculado")
+    bloqueado = models.BooleanField(default=False, verbose_name="Usuário Bloqueado")
 
     class Meta:
         verbose_name = "Lote"
@@ -72,8 +73,6 @@ class Reserva(models.Model):
         if self.data_reserva < hoje:
             raise ValidationError("Não é possível fazer reservas para datas passadas.")
 
-        # Moradores devem respeitar antecedência mínima de 2 dias.
-        # Admin/staff pode agendar sem essa restrição (inclusive pelo Django Admin).
         admin_no_responsavel = bool(
             self.responsavel and (self.responsavel.is_staff or self.responsavel.is_superuser)
         )
