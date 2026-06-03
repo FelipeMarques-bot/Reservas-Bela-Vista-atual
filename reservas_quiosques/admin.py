@@ -46,9 +46,9 @@ class LoteAdmin(admin.ModelAdmin):
     def status_acesso(self, obj):
         if not obj.usuario:
             return format_html('<span class="bv-user-status is-blocked">Sem usuário</span>')
-        if obj.usuario.is_active:
-            return format_html('<span class="bv-user-status is-active">Ativo</span>')
-        return format_html('<span class="bv-user-status is-blocked">Bloqueado</span>')
+        if getattr(obj, 'bloqueado', False):
+            return format_html('<span class="bv-user-status is-blocked">Bloqueado</span>')
+        return format_html('<span class="bv-user-status is-active">Ativo</span>')
 
     @admin.display(description='Ações de Acesso')
     def acoes_acesso(self, obj):
@@ -59,34 +59,32 @@ class LoteAdmin(admin.ModelAdmin):
                 criar_url,
             )
 
-        if obj.usuario.is_active:
-            bloquear_url = reverse('admin:reservas_quiosques_lote_bloquear_usuario', args=[obj.pk])
+        if getattr(obj, 'bloqueado', False):
+            desbloquear_url = reverse('admin:reservas_quiosques_lote_desbloquear_usuario', args=[obj.pk])
             return format_html(
-                '<a class="bv-user-inline-action is-block" href="{}">Bloquear</a>',
-                bloquear_url,
+                '<a class="bv-user-inline-action is-unblock" href="{}">Desbloquear</a>',
+                desbloquear_url,
             )
 
-        desbloquear_url = reverse('admin:reservas_quiosques_lote_desbloquear_usuario', args=[obj.pk])
+        bloquear_url = reverse('admin:reservas_quiosques_lote_bloquear_usuario', args=[obj.pk])
         return format_html(
-            '<a class="bv-user-inline-action is-unblock" href="{}">Desbloquear</a>',
-            desbloquear_url,
+            '<a class="bv-user-inline-action is-block" href="{}">Bloquear</a>',
+            bloquear_url,
         )
 
     @admin.action(description='Bloquear usuários vinculados aos lotes selecionados')
     def bloquear_acesso_lotes(self, request, queryset):
-        vinculados = queryset.exclude(usuario__isnull=True)
-        total = User.objects.filter(pk__in=vinculados.values_list('usuario_id', flat=True), is_active=True).update(is_active=False)
+        total = queryset.filter(bloqueado=False).update(bloqueado=True)
         sem_usuario = queryset.filter(usuario__isnull=True).count()
-        self.message_user(request, f'{total} usuário(s) bloqueado(s) com sucesso.', level=messages.SUCCESS)
+        self.message_user(request, f'{total} lote(s) bloqueado(s) com sucesso.', level=messages.SUCCESS)
         if sem_usuario:
             self.message_user(request, f'{sem_usuario} lote(s) não possuem usuário vinculado.', level=messages.WARNING)
 
     @admin.action(description='Desbloquear usuários vinculados aos lotes selecionados')
     def desbloquear_acesso_lotes(self, request, queryset):
-        vinculados = queryset.exclude(usuario__isnull=True)
-        total = User.objects.filter(pk__in=vinculados.values_list('usuario_id', flat=True), is_active=False).update(is_active=True)
+        total = queryset.filter(bloqueado=True).update(bloqueado=False)
         sem_usuario = queryset.filter(usuario__isnull=True).count()
-        self.message_user(request, f'{total} usuário(s) desbloqueado(s) com sucesso.', level=messages.SUCCESS)
+        self.message_user(request, f'{total} lote(s) desbloqueado(s) com sucesso.', level=messages.SUCCESS)
         if sem_usuario:
             self.message_user(request, f'{sem_usuario} lote(s) não possuem usuário vinculado.', level=messages.WARNING)
 
@@ -121,22 +119,22 @@ class LoteAdmin(admin.ModelAdmin):
 
     def bloquear_usuario_lote_view(self, request, lote_id):
         lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
-        if lote and lote.usuario:
-            lote.usuario.is_active = False
-            lote.usuario.save(update_fields=['is_active'])
+        if lote:
+            lote.bloqueado = True
+            lote.save(update_fields=['bloqueado'])
             self.message_user(request, f'Usuário do lote {lote.numero_lote} bloqueado com sucesso.', level=messages.SUCCESS)
         else:
-            self.message_user(request, 'Lote sem usuário vinculado.', level=messages.WARNING)
+            self.message_user(request, 'Lote não encontrado.', level=messages.WARNING)
         return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
 
     def desbloquear_usuario_lote_view(self, request, lote_id):
         lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
-        if lote and lote.usuario:
-            lote.usuario.is_active = True
-            lote.usuario.save(update_fields=['is_active'])
+        if lote:
+            lote.bloqueado = False
+            lote.save(update_fields=['bloqueado'])
             self.message_user(request, f'Usuário do lote {lote.numero_lote} desbloqueado com sucesso.', level=messages.SUCCESS)
         else:
-            self.message_user(request, 'Lote sem usuário vinculado.', level=messages.WARNING)
+            self.message_user(request, 'Lote não encontrado.', level=messages.WARNING)
         return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
 
     def criar_usuario_lote_view(self, request, lote_id):
