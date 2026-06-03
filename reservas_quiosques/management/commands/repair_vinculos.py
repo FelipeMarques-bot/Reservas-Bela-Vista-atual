@@ -4,13 +4,14 @@ from reservas_quiosques.models import Lote
 
 
 class Command(BaseCommand):
-    help = 'Repara vínculos de lotes buscando usuários pelo padrão lote{numero_lote}.'
+    help = 'Repara vínculos de lotes e sincroniza o bloqueio com o estado do usuário.'
 
     def handle(self, *args, **options):
         vinculados = 0
+        bloqueios_sincronizados = 0
         nao_encontrados = []
 
-        for lote in Lote.objects.all():
+        for lote in Lote.objects.select_related('usuario').all():
             expected_username = f'lote{lote.numero_lote}'.lower().replace(' ', '')
             user = User.objects.filter(username=expected_username).first()
             if not user:
@@ -22,6 +23,13 @@ class Command(BaseCommand):
                 lote.save(update_fields=['usuario'])
                 vinculados += 1
 
+            esperado_bloqueado = not user.is_active
+            if lote.bloqueado != esperado_bloqueado:
+                lote.bloqueado = esperado_bloqueado
+                lote.save(update_fields=['bloqueado'])
+                bloqueios_sincronizados += 1
+
         self.stdout.write(self.style.SUCCESS(f'Vínculos atualizados: {vinculados}'))
+        self.stdout.write(self.style.SUCCESS(f'Bloqueios sincronizados: {bloqueios_sincronizados}'))
         if nao_encontrados:
             self.stdout.write(self.style.WARNING(f'Lotes sem usuário correspondente: {nao_encontrados}'))
