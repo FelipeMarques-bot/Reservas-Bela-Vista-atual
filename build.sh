@@ -12,4 +12,4 @@ if not User.objects.filter(username='admin').exists():
 else:
     print('Superusuário já existe.')
 "
-python manage.py seed_data
+# python manage.py seed_data
