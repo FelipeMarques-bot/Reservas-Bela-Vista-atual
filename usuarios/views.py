@@ -55,13 +55,7 @@ class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
 
     def form_invalid(self, form):
-        print(f"--- DEBUG: form_invalid() chamado. Erros do formulário: {form.errors} ---") # DEBUG
-        if form.errors.get('__all__') and any(e.code in {'inactive', 'blocked'} for e in form.errors.get('__all__')):
-            messages.error(self.request, "❌ Entre em contato com o administrador do condomínio.")
-            print("--- DEBUG: Mensagem de bloqueio adicionada. ---") # DEBUG
-        else:
-            messages.error(self.request, "❌ Usuário ou senha incorretos.")
-            print("--- DEBUG: Mensagem de credenciais incorretas adicionada. ---") # DEBUG
+        # Não usamos messages aqui para não quebrar renderização
         return super().form_invalid(form)
 
 
