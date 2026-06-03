@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from django.contrib.auth.models import User
 from .models import Quiosque, Lote, Reserva
 
+
 @admin.register(Quiosque)
 class QuiosqueAdmin(admin.ModelAdmin):
     list_display = ['nome', 'capacidade_maxima', 'valor_diaria', 'disponivel']
@@ -12,14 +13,20 @@ class QuiosqueAdmin(admin.ModelAdmin):
     search_fields = ['nome', 'descricao']
     list_editable = ['disponivel']
 
+
 @admin.register(Lote)
 class LoteAdmin(admin.ModelAdmin):
     change_list_template = 'admin/reservas_quiosques/lote/change_list.html'
     list_display = ['numero_lote', 'proprietario', 'telefone', 'usuario', 'status_acesso', 'acoes_acesso']
     search_fields = ['numero_lote', 'proprietario']
-    list_filter = ['usuario']
-    readonly_fields = ['usuario']  # Não permite editar o usuário vinculado manualmente
-    actions = ['bloquear_acesso_lotes', 'desbloquear_acesso_lotes', 'criar_usuario_lotes']
+    list_filter = ['usuario', 'bloqueado']
+    readonly_fields = ['usuario']
+    actions = [
+        'bloquear_acesso_lotes',
+        'desbloquear_acesso_lotes',
+        'criar_usuario_lotes',
+        'vincular_usuario_automatico',
+    ]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -117,6 +124,38 @@ class LoteAdmin(admin.ModelAdmin):
         if pulados:
             self.message_user(request, f'{pulados} lote(s) foram ignorados (já vinculados ou username existente).', level=messages.WARNING)
 
+    @admin.action(description='Vincular usuário automaticamente pelo padrão lote{numero} (ex: lote29)')
+    def vincular_usuario_automatico(self, request, queryset):
+        vinculados = 0
+        nao_encontrados = []
+        ja_vinculados = 0
+
+        for lote in queryset.select_related('usuario'):
+            if lote.usuario_id:
+                ja_vinculados += 1
+                continue
+
+            expected_username = f'lote{lote.numero_lote}'.lower().replace(' ', '')
+            user = User.objects.filter(username=expected_username).first()
+            if not user:
+                nao_encontrados.append(lote.numero_lote)
+                continue
+
+            lote.usuario = user
+            lote.save(update_fields=['usuario'])
+            vinculados += 1
+
+        if vinculados:
+            self.message_user(request, f'{vinculados} usuário(s) vinculado(s) automaticamente.', level=messages.SUCCESS)
+        if ja_vinculados:
+            self.message_user(request, f'{ja_vinculados} lote(s) já possuem usuário vinculado.', level=messages.WARNING)
+        if nao_encontrados:
+            self.message_user(
+                request,
+                f'Não foi encontrado usuário com username {", ".join(nao_encontrados)}.',
+                level=messages.WARNING,
+            )
+
     def bloquear_usuario_lote_view(self, request, lote_id):
         lote = Lote.objects.select_related('usuario').filter(pk=lote_id).first()
         if lote:
@@ -165,6 +204,7 @@ class LoteAdmin(admin.ModelAdmin):
             level=messages.SUCCESS,
         )
         return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
+
 
 @admin.register(Reserva)
 class ReservaAdmin(admin.ModelAdmin):
