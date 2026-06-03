@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from reservas_quiosques.models import Lote
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -33,8 +34,13 @@ class CustomAuthenticationForm(AuthenticationForm):
 
             if user is not None:
                 lote = getattr(user, 'lote', None)
+                if not lote:
+                    expected_username = username.strip().lower()
+                    lote_numero = expected_username.replace('lote', '', 1).strip()
+                    lote = Lote.objects.filter(numero_lote=lote_numero).first()
+
                 if lote and getattr(lote, 'bloqueado', False):
-                    print(f"--- DEBUG: Usuário bloqueado no lote: {user.username} ---")
+                    print(f"--- DEBUG: Usuário bloqueado no lote: {user.username} (Lote {lote.numero_lote}) ---")
                     raise ValidationError(
                         "Entre em contato com o administrador do condomínio.",
                         code='blocked'
@@ -50,9 +56,9 @@ class CustomLoginView(LoginView):
 
     def form_invalid(self, form):
         print(f"--- DEBUG: form_invalid() chamado. Erros do formulário: {form.errors} ---") # DEBUG
-        if form.errors.get('__all__') and any(e.code == 'inactive' for e in form.errors.get('__all__')):
+        if form.errors.get('__all__') and any(e.code in {'inactive', 'blocked'} for e in form.errors.get('__all__')):
             messages.error(self.request, "❌ Entre em contato com o administrador do condomínio.")
-            print("--- DEBUG: Mensagem de usuário inativo adicionada. ---") # DEBUG
+            print("--- DEBUG: Mensagem de bloqueio adicionada. ---") # DEBUG
         else:
             messages.error(self.request, "❌ Usuário ou senha incorretos.")
             print("--- DEBUG: Mensagem de credenciais incorretas adicionada. ---") # DEBUG
