@@ -5,26 +5,47 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
 from django.utils.html import format_html
+from reservas_quiosques.models import Lote
 
 
 @admin.action(description='Bloquear usuários selecionados')
 def bloquear_usuarios(modeladmin, request, queryset):
-	total = queryset.filter(is_active=True).update(is_active=False)
-	modeladmin.message_user(
-		request,
-		f'{total} usuário(s) bloqueado(s) com sucesso.',
-		level=messages.SUCCESS,
-	)
+    total = 0
+    for user in queryset:
+        lote = getattr(user, 'lote', None)
+        if not lote:
+            expected_username = user.username.strip().lower()
+            lote_numero = expected_username.replace('lote', '', 1).strip()
+            lote = Lote.objects.filter(numero_lote=lote_numero).first()
+        if lote and not lote.bloqueado:
+            lote.bloqueado = True
+            lote.save(update_fields=['bloqueado'])
+            total += 1
+    modeladmin.message_user(
+        request,
+        f'{total} usuário(s) bloqueado(s) com sucesso.',
+        level=messages.SUCCESS,
+    )
 
 
 @admin.action(description='Desbloquear usuários selecionados')
 def desbloquear_usuarios(modeladmin, request, queryset):
-	total = queryset.filter(is_active=False).update(is_active=True)
-	modeladmin.message_user(
-		request,
-		f'{total} usuário(s) desbloqueado(s) com sucesso.',
-		level=messages.SUCCESS,
-	)
+    total = 0
+    for user in queryset:
+        lote = getattr(user, 'lote', None)
+        if not lote:
+            expected_username = user.username.strip().lower()
+            lote_numero = expected_username.replace('lote', '', 1).strip()
+            lote = Lote.objects.filter(numero_lote=lote_numero).first()
+        if lote and lote.bloqueado:
+            lote.bloqueado = False
+            lote.save(update_fields=['bloqueado'])
+            total += 1
+    modeladmin.message_user(
+        request,
+        f'{total} usuário(s) desbloqueado(s) com sucesso.',
+        level=messages.SUCCESS,
+    )
 
 
 class UserAdmin(BaseUserAdmin):
@@ -81,17 +102,29 @@ class UserAdmin(BaseUserAdmin):
 	def bloquear_usuario_view(self, request, user_id):
 		user = User.objects.filter(pk=user_id).first()
 		if user:
-			user.is_active = False
-			user.save(update_fields=['is_active'])
-			self.message_user(request, f'Usuário {user.username} bloqueado com sucesso.', level=messages.SUCCESS)
+			lote = getattr(user, 'lote', None)
+			if not lote:
+				expected_username = user.username.strip().lower()
+				lote_numero = expected_username.replace('lote', '', 1).strip()
+				lote = Lote.objects.filter(numero_lote=lote_numero).first()
+			if lote and not lote.bloqueado:
+				lote.bloqueado = True
+				lote.save(update_fields=['bloqueado'])
+				self.message_user(request, f'Usuário {user.username} bloqueado com sucesso.', level=messages.SUCCESS)
 		return HttpResponseRedirect(reverse('admin:auth_user_changelist'))
 
 	def desbloquear_usuario_view(self, request, user_id):
 		user = User.objects.filter(pk=user_id).first()
 		if user:
-			user.is_active = True
-			user.save(update_fields=['is_active'])
-			self.message_user(request, f'Usuário {user.username} desbloqueado com sucesso.', level=messages.SUCCESS)
+			lote = getattr(user, 'lote', None)
+			if not lote:
+				expected_username = user.username.strip().lower()
+				lote_numero = expected_username.replace('lote', '', 1).strip()
+				lote = Lote.objects.filter(numero_lote=lote_numero).first()
+			if lote and lote.bloqueado:
+				lote.bloqueado = False
+				lote.save(update_fields=['bloqueado'])
+				self.message_user(request, f'Usuário {user.username} desbloqueado com sucesso.', level=messages.SUCCESS)
 		return HttpResponseRedirect(reverse('admin:auth_user_changelist'))
 
 
