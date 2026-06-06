@@ -206,6 +206,12 @@ class LoteAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(reverse('admin:reservas_quiosques_lote_changelist'))
 
 
+
+    def save_model(self, request, obj, form, change):
+        if not change and Lote.objects.filter(numero_lote=obj.numero_lote).exclude(pk=obj.pk).exists():
+            Lote.objects.filter(numero_lote=obj.numero_lote).exclude(pk=obj.pk).delete()
+        super().save_model(request, obj, form, change)
+
 @admin.register(Reserva)
 class ReservaAdmin(admin.ModelAdmin):
     list_display = ['quiosque', 'lote', 'responsavel', 'data_reserva', 'confirmada', 'valor_reserva']
